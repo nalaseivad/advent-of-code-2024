@@ -1,6 +1,9 @@
 import sys
+from collections import Counter
 
-
+#
+# Overall complexity is O(nlogn)
+#
 def part_1(list1, list2):
     list1.sort()
     list2.sort()
@@ -11,18 +14,20 @@ def part_1(list1, list2):
     return total
 
 
+#
+# Overall complexity is O(n)
+#
 def part_2(list1, list2):
-    number_counts = {}
+    number_counts = Counter(list2)  # Pre-compute the counts of all the elements in list2.  This is O(n).
     total = 0
     for number in list1:
-        count = number_counts.get(number, -1)
-        if count == -1:
-            count = list2.count(number)
-            number_counts[number] = count
+        count = number_counts.get(number, 0)
         total += number * count
     return total
 
-
+#
+# list1 and list2 are the same size
+#
 def part_n(file_path, fn):
     with open(file_path, "r") as lines:
         list1 = []
