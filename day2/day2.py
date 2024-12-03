@@ -4,43 +4,38 @@ import sys
 def test_consecutive_levels(level1, level2, increasing):
     new_increasing = 1 if level2 > level1 else 0
     if increasing == -1: increasing = new_increasing             # Init increasing if first time
-    
+
     if level1 == level2: return (False, increasing)              # Levels must be strictly increasing or decreasing
     if abs(level2 - level1) > 3: return (False, increasing)      # Levels must differ by no more than 3
     if new_increasing != increasing: return (False, increasing)  # Levels must continue in the same direction as before
     return (True, new_increasing)
 
 
-def report_is_safe(report_numbers):
+def levels_are_safe(levels):
     increasing = -1
-    for n, prev_n in zip(report_numbers[1:], report_numbers):
+    for n, prev_n in zip(levels[1:], levels):
         (safe, increasing) = test_consecutive_levels(prev_n, n, increasing)
         if not safe: return False
     return True
 
 
-def part_1(report_numbers):
-    return report_is_safe(report_numbers)
+def part_1(levels):
+    return levels_are_safe(levels)
 
 
-def part_2(report_numbers):
-    # Test the report numbers as they are
-    if report_is_safe(report_numbers):
-        return True
-    # Allow for excluding one level
-    for n in range(len(report_numbers)):
-        new_report_numbers = report_numbers[:n] + report_numbers[n + 1:]   # Skip the nth level
-        if report_is_safe(new_report_numbers):
-            return True
-    return False
+#
+# Test sub-lists of the levels with each element removed in turn.  The list is safe if any of the sub-lists are safe.
+#
+def part_2(levels):
+    return any(levels_are_safe(levels[:n] + levels[n + 1 :]) for n in range(len(levels)))
 
 
 def part_n(file_path, fn):
     safe_count = 0
     with open(file_path, "r") as lines:
         for row in (line.rstrip("\n") for line in lines):
-            report_numbers = [int(x) for x in row.split()]
-            if fn(report_numbers):
+            levels = [int(x) for x in row.split()]
+            if fn(levels):
                 safe_count += 1
     print(safe_count)
 
