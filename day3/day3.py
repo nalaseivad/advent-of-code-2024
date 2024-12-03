@@ -19,7 +19,6 @@ def part_2(text):
     multiply_on = True
     for match in matches:
         token = match.group(0)
-        print(f'{token=}')
         if token.startswith("mul"):
             if multiply_on:
                 arg1, arg2 = int(match.group(1)), int(match.group(2))
