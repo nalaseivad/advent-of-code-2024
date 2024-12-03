@@ -1,4 +1,5 @@
 import sys
+from itertools import pairwise
 
 
 def test_consecutive_levels(level1, level2, increasing):
@@ -13,7 +14,8 @@ def test_consecutive_levels(level1, level2, increasing):
 
 def levels_are_safe(levels):
     increasing = -1
-    for n, prev_n in zip(levels[1:], levels):
+    # Can use pairwise in place of zip(levels[1:], levels):
+    for n, prev_n in pairwise(levels):
         (safe, increasing) = test_consecutive_levels(prev_n, n, increasing)
         if not safe: return False
     return True
